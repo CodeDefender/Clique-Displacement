@@ -1,0 +1,118 @@
+class DrawGraph
+{ 
+ float x_pos[];    // x position of division in ellipse
+ float y_pos[];    // y position of division in ellipse
+  //int matrix [][];  // matrix for storing cliques , it is a jagged array
+ // float xv_pos[] = new float[V];   // position of x Vertex
+ // float yv_pos[] = new float[V];   // position of y Vertex
+  float a;              // ellipse width
+  float b;              // ellipse height
+  
+  void assignPoints(int cliqueFound , float c_x,float c_y, float w, float h )
+  { 
+    a= w/2 -100;
+    b= h/2-20;
+    int theta = 0;
+    int d_theta = 360 / cliqueFound ;
+     x_pos = new float[cliqueFound];
+     y_pos = new float[cliqueFound];
+    for(int i = 0; i < cliqueFound ; i++ )
+     {
+      x_pos[i] = c_x + ( a ) * cos(PI*(theta)/180);
+      y_pos[i] = c_y - ( b ) * sin(PI*(theta)/180);
+      stroke(251);
+      strokeWeight(10);
+    //  point(x_pos[i],y_pos[i]);
+      
+      theta = theta + d_theta;
+       print("x_pos[i] = " + x_pos[i]+"y_pos[i] = " + y_pos[i]);
+      
+     }
+     strokeWeight(2);
+  }
+ 
+void drawCliques(int cliquesFound , String Cliques[])
+  {  
+    int matrix [][] = new int [cliquesFound][];
+ 
+   // Copying cliues in matrix [][]
+    for(int i = 0; i < cliquesFound ; i++)        
+     { 
+       int k = int(((Cliques[i].length())/3)+1);
+       matrix [i] = new int [k];
+       matrix [i] = int(split(Cliques[i],", "));
+     }
+    
+   // Assigning position to all vertex of each cliques  
+    for(int i = 0; i < cliquesFound ; i++)
+    {
+      int theta = 0;
+      int d_theta = 360 / matrix[i].length ;
+      
+      for (int j = 0; j < matrix[i].length ; j++)
+          {  print(" i = " + i + " j = " + j);
+             print("x_pos[i] = " + x_pos[i]);
+            xv_pos[matrix[i][j]] = x_pos[i]+r*cos(PI*(theta)/180);
+            yv_pos[matrix[i][j]] = y_pos[i]-r*sin(PI*(theta)/180);
+      
+          strokeWeight(30);
+          stroke(229,92,69);
+          point(xv_pos[matrix[i][j]],yv_pos[matrix[i][j]]);
+      
+          theta = theta + d_theta;
+      
+          }
+          strokeWeight(2);
+       // Drawing edges between each vertex pair of each clique
+       for (int m = 0; m < matrix[i].length ; m++)
+            for (int n = 0; n < matrix[i].length ; n++)
+             { stroke(13,50,188);
+               if(m != n)
+               line( xv_pos[matrix[i][m]] , yv_pos[matrix[i][m]],xv_pos[matrix[i][n]] , yv_pos[matrix[i][n]] ) ;
+             }
+            
+    }
+      strokeWeight(2);
+  }
+     
+ 
+   
+   
+   void remainingGraph(String rem_Graph[], String Non_clique[] , int v)  // v is remaining vertices
+   {
+     int matrix [][] = new int [V][V];
+ 
+   // Copying remaining Graph in matrix [][]
+    for(int i = 0; i < rem_Graph.length ; i++)        
+     {
+       matrix [i] = int(split(rem_Graph[i]," "));
+     }
+     
+    // Positioning Non_ clique points 
+     int Arr[] = new int[v];
+     int theta = 0;
+    int d_theta = 360 / v ;
+     
+     Arr = int(split(Non_clique[0],", "));
+     
+     for(int i = 0; i < v; i++)
+       {
+         xv_pos[Arr[i]] = width/2 + r * cos(PI *(90+theta)/180);
+         yv_pos[Arr[i]] = height/2 - r * sin(PI *(90+theta)/180);
+         strokeWeight(28);
+         stroke(71,0,0);
+         point(xv_pos[Arr[i]],yv_pos[Arr[i]]);      
+         theta = theta + d_theta;
+      
+        }
+    strokeWeight(2);
+    // Drawing edges between each vertex pair of remaining Graph
+       for (int m = 0; m < V ; m++)
+            for (int n = 0; n < V ; n++)
+            { stroke(24,60,20);
+              if(matrix[m][n] != 0 )
+              line( xv_pos[m],yv_pos[m],xv_pos[n],yv_pos[n] );
+            }
+   }
+            
+}
